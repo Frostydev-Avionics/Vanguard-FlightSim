@@ -19,35 +19,23 @@ function inds = getKfInds()
     inds.vz = 10;
     inds.vel = [inds.vx; inds.vy; inds.vz]; % [m/s]
 
-    % Angular Velocity
-    inds.wx = 11;
-    inds.wy = 12;
-    inds.wz = 13;
-    inds.angVel = [inds.wx; inds.wy; inds.wz]; % [rad/s]
-
     % Gyro Bias
-    inds.gbx = 14;
-    inds.gby = 15;
-    inds.gbz = 16;
+    inds.gbx = 11;
+    inds.gby = 12;
+    inds.gbz = 13;
     inds.gyroBias = [inds.gbx; inds.gby; inds.gbz]; % [rad/s]
 
     % Accel Bias
-    inds.abx = 17;
-    inds.aby = 18;
-    inds.abz = 19;
+    inds.abx = 14;
+    inds.aby = 15;
+    inds.abz = 16;
     inds.accelBias = [inds.abx; inds.aby; inds.abz]; % [m/s/s]
 
     % Mag Bias
-    inds.mbx = 20;
-    inds.mby = 21;
-    inds.mbz = 22;
+    inds.mbx = 17;
+    inds.mby = 18;
+    inds.mbz = 19;
     inds.magBias = [inds.mbx; inds.mby; inds.mbz]; % [uT]
-
-    % Inertia
-    inds.I_x = 23;
-    inds.I_y = 24;
-    inds.I_z = 25;
-    inds.inertia = [inds.I_x; inds.I_y; inds.I_z]; % [kg*m^2]
 
     % Compute max scalar index
     scalarFields = structfun(@(x) isscalar(x), inds);

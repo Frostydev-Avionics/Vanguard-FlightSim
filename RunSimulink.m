@@ -30,6 +30,7 @@ MotorModel = initMotorModel();
 %% Simulator Config **FOR SIMULINK USE LATER**
 % Time Configuration
 time.dt = 0.001; % [s] Time Step
+time.sensorDt = 0.001;
 time.navDt = 0.01;
 time.t0 = -10; % [s] Initial Time
 % time.tf = 60*3; % [s] Final Time

@@ -12,7 +12,7 @@ function kfParams = initNavParams(kins)
     kfParams.x(kfInds.quat) = [1; 0; 0; 0];
 
     % Initial Guess at Inertia
-    kfParams.x(kfInds.inertia) = [kins.I_x_empty; kins.I_y_empty; kins.I_z_empty];
+    % kfParams.x(kfInds.inertia) = [kins.I_x_empty; kins.I_y_empty; kins.I_z_empty];
     
     kfParams.x_pred   = kfParams.x;
     kfParams.Q_k      = initProcessNoise(kfErrInds, kfConsts);     % [N_err x N_err]

@@ -34,23 +34,6 @@ function plotNav(out, kfInds, kfErrInds)
     pos_true_resampled = resampleTimeSeries(pos_T_true, truthTime, navTime);
     vel_true_resampled = resampleTimeSeries(vel_T_true, truthTime, navTime);
     q_true_resampled   = resampleTimeSeries(q_true, truthTime, navTime);
-    
-    % === Quaternion Error as Angle ===
-    q_err = zeros(length(navTime), 4);
-    for i = 1:length(navTime)
-        qT = q_true_resampled(:, i)';
-        qE = q_est(:, i)';
-        q_err(i, :) = quatmultiply(qT, quatinv(qE));
-    end
-    angle_error = 2 * acos(min(1, abs(q_err(:,1))));  % Angle in radians
-    angle_error_deg = rad2deg(angle_error);
-
-    figure('Name', 'Attitude Error');
-    plot(navTime, angle_error_deg, 'r');
-    ylabel('Angle Error (deg)');
-    xlabel('Time (s)');
-    title('Attitude Error Magnitude');
-    grid on;
 
     % === Convert to ZYX Euler Angles ===
     quatToEulerZYX = @(q) rad2deg(quat2eul(q', 'ZYX'));  % returns [yaw pitch roll] rows

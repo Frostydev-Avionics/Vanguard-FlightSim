@@ -10,9 +10,6 @@ function errInds = getErrorKfInds()
     % Velocity
     errInds.vel = idx:idx+2;         idx = idx + 3;
 
-    % Angular velocity (new!)
-    errInds.angVel = idx:idx+2;      idx = idx + 3;
-
     % Gyro bias
     errInds.gyroBias = idx:idx+2;    idx = idx + 3;
 
@@ -21,9 +18,6 @@ function errInds = getErrorKfInds()
 
     % Mag bias
     errInds.magBias = idx:idx+2;     idx = idx + 3;
-
-    % Inertia
-    errInds.inertia = idx:idx+2;     idx = idx + 3;
 
     % Compute max index from all fields
     allIndices = struct2cell(errInds);
