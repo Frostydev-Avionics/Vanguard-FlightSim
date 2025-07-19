@@ -13,6 +13,7 @@ kins = HPRC_RocketKinematics();
 % Kinematics 
 inds = getMissileInds(); % Control State Indices
 kfInds = getKfInds();
+kfErrInds = getErrorKfInds();
 kfConsts = getKfConsts();
 
 % Aerodynamics Model
@@ -100,6 +101,7 @@ kfParams = initNavParams(kins);
 assignin('base', 'kfParams', kfParams);
 
 N = length(kfParams.x);
+N_err = kfErrInds.maxStateIndex;
 
 elems(1) = Simulink.BusElement;
 elems(1).Name = 'x';
@@ -111,15 +113,15 @@ elems(2).Dimensions = [N 1];
 
 elems(3) = Simulink.BusElement;
 elems(3).Name = 'Q_k';
-elems(3).Dimensions = [N N];
+elems(3).Dimensions = [N_err N_err];
 
 elems(4) = Simulink.BusElement;
 elems(4).Name = 'P';
-elems(4).Dimensions = [N N];
+elems(4).Dimensions = [N_err N_err];
 
 elems(5) = Simulink.BusElement;
 elems(5).Name = 'P_min';
-elems(5).Dimensions = [N N];
+elems(5).Dimensions = [N_err N_err];
 
 elems(6) = Simulink.BusElement;
 elems(6).Name = 'f_pred';

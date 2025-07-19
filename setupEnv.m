@@ -9,8 +9,8 @@ simPaths = {
     fullfile('Models', 'Motor')
     fullfile('Models', 'Controls')
     fullfile('Models', 'Gravity')
-    genpath(fullfile('Models', 'Navigatior'))
     genpath(fullfile('Models', 'RefactoredNav'))
+    % genpath(fullfile('Models', 'Nav'))
     
     % Atmospheric Model
     fullfile('Models', 'Atmosphere')

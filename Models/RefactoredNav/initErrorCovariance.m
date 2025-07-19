@@ -1,41 +1,31 @@
-function P = initErrorCovariance(kfInds, kfConsts)
+function P = initErrorCovariance(errInds, kfConsts)
 
-    % State Size
-    allInds = struct2cell(kfInds);
-    flatInds = cellfun(@(x) x(:), allInds, 'UniformOutput', false);
-    N = max(cell2mat(flatInds));
-    P = zeros(N,N);
+    N = errInds.maxStateIndex;
+    P = zeros(N, N);
 
-    %% === Quaternion ===
-    % Quaternion Uncertinainty (units: Idk I should make up some random
-    % unit that nobody else follows because it'd be funny)
-    P(sub2ind(size(P), kfInds.quat, kfInds.quat)) = 1e-4; % []
+    % === Small-Angle Attitude Error (δθ) ===
+    P(sub2ind(size(P), errInds.theta, errInds.theta)) = (deg2rad(20))^2;
 
-    %% === Position ===
-    % Position Uncertainty (units: m)
-    P(sub2ind(size(P), kfInds.pos, kfInds.pos)) = (1)^2; % [m]
+    % === Position Error ===
+    P(sub2ind(size(P), errInds.pos, errInds.pos)) = (5)^2;  % GPS init might be ~5m off
 
-    %% === Velocity ===
-    % Velocity Uncertainty (units: m/s)
-    P(sub2ind(size(P), kfInds.vel, kfInds.vel)) = kfConsts.icm20948.accelXY_VRW^2; % [m/s]
+    % === Velocity Error ===
+    P(sub2ind(size(P), errInds.vel, errInds.vel)) = (0.5)^2;
 
-    %% === Angular Velocity ===
-    % Angular Velocity Uncertainty (units: rad/s)
-    P(sub2ind(size(P), kfInds.angVel, kfInds.angVel)) = kfConsts.icm20948.gyroXYZ_var^2; % [rad/s]
+    % === Angular Velocity Error ===
+    P(errInds.angVel, errInds.angVel) = (0.1)^2;
 
-    %% === Accelerometer Bias ===
-    % Accelerometer Bias Uncertainty (units: m/s/s)
-    accel_var_xy = kfConsts.icm20948.accelXY_var^2;
-    accel_var_z  = kfConsts.icm20948.accelZ_var^2;
-    P(kfInds.abx, kfInds.abx) = accel_var_xy;
-    P(kfInds.aby, kfInds.aby) = accel_var_xy;
-    P(kfInds.abz, kfInds.abz) = accel_var_z;
+    % === Gyro Bias Error ===
+    P(sub2ind(size(P), errInds.gyroBias, errInds.gyroBias)) = (deg2rad(2.0))^2;
 
-    %% === Magnetometer Bias ===
-    % Magnetometer Bias Uncertainty (units: uT)
-    P(sub2ind(size(P), kfInds.magBias, kfInds.magBias)) = kfConsts.mmc5983.magXYZ_var^2;
+    % === Accelerometer Bias Error ===
+    P(errInds.accelBias(1:2), errInds.accelBias(1:2)) = (0.2)^2;
+    P(errInds.accelBias(3),   errInds.accelBias(3))   = (0.5)^2;
 
-    %% === Inertia ===
-    % Inertia uncertainty (units: kg*m^2)
-    P(sub2ind(size(P), kfInds.inertia, kfInds.inertia)) = (1e-5)^2;
+    % === Magnetometer Bias Error ===
+    P(sub2ind(size(P), errInds.magBias, errInds.magBias)) = (30e-6)^2;  % 30 µT uncertainty
+
+    % === Inertia Error ===
+    P(sub2ind(size(P), errInds.inertia, errInds.inertia)) = (5e-8)^2;
+
 end

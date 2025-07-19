@@ -17,7 +17,10 @@ for i = 1:3
     k3   = params.k3(i);
     noise = params.noise * randn();
 
-    y_tilde(i) = yi + bias + sf * yi + k2 * yi^2 + k3 * yi^3 + noise;
+    %% DISABLE HIGHER ORDER TERMS TERMPORARILIY
+    % y_tilde(i) = yi + bias + sf * yi + k2 * yi^2 + k3 * yi^3 + noise;
+    % y_tilde(i) = yi + bias + noise;
+    y_tilde(i) = yi;
 end
 
 end
