@@ -8,6 +8,7 @@ function f = predictionFunction(x, u, kfInds)
     bg = x(kfInds.gyroBias);    % Gyro bias
     ba = x(kfInds.accelBias);   % Accel bias
     bm = x(kfInds.magBias);     % Mag bias (still unused)
+    g  = x(kfInds.g);
 
     % === Inputs ===
     u_gyro  = u(1:3);           % Measured angular velocity
@@ -22,7 +23,7 @@ function f = predictionFunction(x, u, kfInds)
     % === Position and velocity ===
     dp = v;
 
-    gravity = [0; 0; 9.80665];
+    gravity = [0; 0; g];
     a_B = u_accel - ba;
     R_NB = quat2rotm(q');
     dv = R_NB * a_B + gravity;
@@ -32,11 +33,15 @@ function f = predictionFunction(x, u, kfInds)
     dba = zeros(3,1);
     dbm = zeros(3,1);
 
+    % === Gravity Change ===
+    dg = 0;
+
     % === Output ===
     f = [dq;
          dp;
          dv;
          dbg;
          dba;
-         dbm];
+         dbm;
+         dg];
 end

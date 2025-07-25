@@ -6,6 +6,7 @@ function phi = predictionJacobian(x, u, kfInds, kfErrInds, kfConsts, time)
     q  = x(kfInds.quat);
     bg = x(kfInds.gyroBias);
     ba = x(kfInds.accelBias);
+    g  = x(kfInds.g);
 
     u_gyro  = u(1:3);
     u_accel = u(4:6);

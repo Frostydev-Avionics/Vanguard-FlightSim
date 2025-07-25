@@ -36,4 +36,13 @@ function q_0 = computeInitialQuaternion(a_b, m_b)
 
     q_0 = [qw; qx; qy; qz];  % [w; x; y; z]
     q_0 = q_0 / norm(q_0);
+
+    % Attitude Initialization
+    yaw_0 = deg2rad(0);
+    roll_0 = deg2rad(0);
+    pitch_0 = deg2rad(86);
+     
+    eul_0 = [roll_0; pitch_0; yaw_0];
+    
+    q_0 = hpmr_eul2quat(roll_0, pitch_0, yaw_0);
 end

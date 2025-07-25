@@ -10,6 +10,7 @@ function kfParams = initNavParams(kins)
     kfParams.x        = zeros(N, 1);
 
     kfParams.x(kfInds.quat) = [1; 0; 0; 0];
+    kfParams.x(kfInds.g) = 9.81; % [m/s^2]
 
     % Initial Guess at Inertia
     % kfParams.x(kfInds.inertia) = [kins.I_x_empty; kins.I_y_empty; kins.I_z_empty];

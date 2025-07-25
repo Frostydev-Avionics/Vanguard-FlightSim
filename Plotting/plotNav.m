@@ -1,5 +1,8 @@
 function plotNav(out, kfInds, kfErrInds)
     close all; clc;
+
+    set(groot, 'defaultAxesTickLabelInterpreter', 'latex');
+    set(groot, 'defaultLegendInterpreter', 'latex');
     
     ICM20948_PARAMS = getICM20948Params();
     MMC5983_PARAMS  = getMMC5983Params();
@@ -8,6 +11,7 @@ function plotNav(out, kfInds, kfErrInds)
     truthTime = out.tout;
     pos_T_true = out.P_T.Data;
     RPY = rad2deg(out.RPY.Data);
+    g_b_true   = out.g_B_true.Data';
 
     N = size(out.R_BT.Data, 3);
     q_true = zeros(4, N);  % [4 x N]
@@ -21,6 +25,7 @@ function plotNav(out, kfInds, kfErrInds)
     % Navigation state estimates
     navTime = out.NavBus.x.Time;
     x_est = out.NavBus.x.Data;
+    x_est(:,1) = x_est(:,2);
     P     = out.NavBus.P.Data;
     
     q_est  = x_est(kfInds.quat, :);
@@ -29,11 +34,13 @@ function plotNav(out, kfInds, kfErrInds)
     mb_est = x_est(kfInds.magBias, :);
     pos_est = x_est(kfInds.pos, :);
     vel_est = x_est(kfInds.vel, :);
+    g_est   = x_est(kfInds.g, :);
     
     % === Resample Ground Truth ===
     pos_true_resampled = resampleTimeSeries(pos_T_true, truthTime, navTime);
     vel_true_resampled = resampleTimeSeries(vel_T_true, truthTime, navTime);
     q_true_resampled   = resampleTimeSeries(q_true, truthTime, navTime);
+    g_b_true_resampled = resampleTimeSeries(g_b_true, truthTime, navTime);
 
     % === Convert to ZYX Euler Angles ===
     quatToEulerZYX = @(q) rad2deg(quat2eul(q', 'ZYX'));  % returns [yaw pitch roll] rows
@@ -60,9 +67,10 @@ function plotNav(out, kfInds, kfErrInds)
     % === State Errors ===
     pos_error = pos_true_resampled - pos_est;
     vel_error = vel_true_resampled - vel_est;
-    ab_error = ab_est - ICM20948_PARAMS.accel.bias;
-    gb_error = gb_est - ICM20948_PARAMS.gyro.bias;
-    mb_error = mb_est - MMC5983_PARAMS.bias;
+    ab_error  = ICM20948_PARAMS.accel.bias - ab_est;
+    gb_error  = ICM20948_PARAMS.gyro.bias - gb_est;
+    mb_error  = MMC5983_PARAMS.bias - mb_est;
+    g_error   = vecnorm(g_b_true_resampled) - g_est;
 
     % === Plot Errors with Covariance ===
     plotWithCovariance(navTime, eul_error, P, kfErrInds.theta, ...
@@ -72,7 +80,7 @@ function plotNav(out, kfInds, kfErrInds)
     plotWithCovariance(navTime, gb_error,  P, kfErrInds.gyroBias, 'Gyro Bias Estimation (rad/s)', {'X', 'Y', 'Z'});
     plotWithCovariance(navTime, ab_error,  P, kfErrInds.accelBias, 'Accel Bias Estimation (m/s²)', {'X', 'Y', 'Z'});
     plotWithCovariance(navTime, mb_error,  P, kfErrInds.magBias, 'Mag Bias Estimation (uT)', {'X', 'Y', 'Z'});
-    
+    plotWithCovariance(navTime, g_error, P, kfErrInds.g, 'Gravity Estimation (m/s^2)', {'Norm'});
 end
 
 

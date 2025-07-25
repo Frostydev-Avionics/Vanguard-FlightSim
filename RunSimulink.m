@@ -1,3 +1,4 @@
+% function SimOut = RunSimulink()
 %% WPI High Power Rocket MQP - Flight Simulator
 % Author: Daniel Pearson (djpearson@wpi.edu)
 % Version: 12.15.2024
@@ -160,3 +161,5 @@ assignin('base', 'MotorModel', MotorModel);
 assignin('base', 'simCfg', simCfg);
 assignin('base', 'launchLLA', launchLLA);
 assignin('base', 'x_0', x_0);
+
+% end

@@ -19,6 +19,9 @@ function errInds = getErrorKfInds()
     % Mag bias
     errInds.magBias = idx:idx+2;     idx = idx + 3;
 
+    % Gravity
+    errInds.g = idx; idx = idx + 1;
+
     % Compute max index from all fields
     allIndices = struct2cell(errInds);
     flatIndices = cellfun(@(x) x(:), allIndices, 'UniformOutput', false);

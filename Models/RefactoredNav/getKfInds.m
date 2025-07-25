@@ -37,6 +37,9 @@ function inds = getKfInds()
     inds.mbz = 19;
     inds.magBias = [inds.mbx; inds.mby; inds.mbz]; % [uT]
 
+    % Gravity 
+    inds.g = 20;
+
     % Compute max scalar index
     scalarFields = structfun(@(x) isscalar(x), inds);
     scalarValues = struct2cell(inds);
